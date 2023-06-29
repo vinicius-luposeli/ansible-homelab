@@ -45,6 +45,10 @@
       shell: docker swarm init
       when: inventory_hostname == '192.168.0.130'
 
+    - name: Gerando Token worker
+      shell: docker swarm join-token >> /home/vinicius/data/swarm/tokens.txt
+      when: inventory_hostname == '192.168.0.130'
+
     - name: Gerando Token de manager
       shell: docker swarm join-token manager > /home/vinicius/data/swarm/tokens.txt
       when: inventory_hostname == '192.168.0.130'
