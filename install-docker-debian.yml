@@ -1,6 +1,6 @@
 ---
 - name: Instalando o Docker
-  hosts: geral
+  hosts: cluster-swarm
   become: true
   become_method: sudo
   tasks:
