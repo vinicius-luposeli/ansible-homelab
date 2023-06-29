@@ -1,0 +1,75 @@
+---
+- name: Instalando o Docker
+  hosts: cluster-swarm
+  become: true
+  become_method: sudo
+  tasks:
+    - name: Atualizando o Cache
+      apt:
+        update_cache: true
+    - name: Instalando pacotes requiridos para o Docker
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - lsb-release
+          - gnupg
+        state: latest
+
+    - name: Adicionando chave GPG
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Adicionando repositório
+      apt_repository:
+        repo: "deb https://download.docker.com/linux/debian bullseye stable"
+        state: present
+        filename: docker
+
+    - name: Atualizando o Cache
+      apt:
+        update_cache: true
+
+    - name: Instalando o Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+          - docker-buildx-plugin
+        state: latest
+    
+#    - name: Criar o cluster Swarm
+#      shell: docker swarm init --advertise-addr "{{ ansible_default_ipv4.address }}"
+
+    - name: Obter token de manager
+      shell: docker swarm join-token -q manager
+      register: swarm_token
+
+    - name: Configurar os managers
+      shell: docker swarm join --token {{ swarm_token.stdout }} "{{ hostvars[item].ansible_default_ipv4.address }}:2377"
+      when: inventory_hostname != item
+      loop: "{{ groups['cluster-swarm'] }}"
+
+    - name: Definir managers no inventário
+      add_host:
+        name: "{{ hostvars[item].ansible_default_ipv4.address }}"
+        groups: swarm_managers
+      when: inventory_hostname != item
+      loop: "{{ groups['cluster-swarm'] }}"
+
+
+
+#    - name: Criando o cluster-swarm
+#      shell: docker swarm init
+#      when: inventory_hostname == '192.168.0.130'
+#
+#    - name: Gerando Token worker
+#      shell: docker swarm join-token > /home/vinicius/data/swarm/tokens.txt
+#      when: inventory_hostname == '192.168.0.130'
+#
+#    - name: Gerando Token de manager
+#      shell: docker swarm join-token manager >> /home/vinicius/data/swarm/tokens.txt
+#      when: inventory_hostname == '192.168.0.130'
