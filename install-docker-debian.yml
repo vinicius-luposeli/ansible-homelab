@@ -1,0 +1,42 @@
+---
+- name: Instalando o Docker
+  hosts: geral
+  become: true
+  become_method: sudo
+  tasks:
+    - name: Atualizando o Cache
+      apt:
+        update_cache: true
+    - name: Instalando pacotes requiridos para o Docker
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - lsb-release
+          - gnupg
+        state: latest
+
+    - name: Adicionando chave GPG
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Adicionando repositório
+      apt_repository:
+        repo: "deb https://download.docker.com/linux/debian bullseye stable"
+        state: present
+        filename: docker
+
+    - name: Atualizando o Cache
+      apt:
+        update_cache: true
+
+    - name: Instalando o Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+          - docker-buildx-plugin
+        state: latest
