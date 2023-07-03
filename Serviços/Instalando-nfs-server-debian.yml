@@ -1,0 +1,66 @@
+---
+- name: Instalar e configurar o NFS
+  hosts: seu_servidor
+  become: yes
+
+  tasks:
+    - name: Atualizando o Cache
+      apt:
+        update_cache: true
+
+    - name: Instalar pacotes do NFS
+      apt:
+        name: nfs-kernel-server
+        state: latest
+
+    - name: Criar diretório de exportação
+      file:
+        path: /home/vinicius/dados_swarm
+        state: directory
+        mode: '0755'
+
+    - name: Adicionar configuração de exportação no /etc/exports
+      blockinfile:
+        path: /etc/exports
+        block: |
+          /home/vinicius/dados_swarm  *(rw,sync,no_subtree_check,no_root_squash)
+
+    - name: Reiniciar o serviço do NFS
+      service:
+        name: nfs-kernel-server
+        state: restarted
+
+- name: Configurar cliente NFS
+  hosts: nfs-client
+  become: yes
+
+  tasks:
+    - name: Atualizar cache
+      apt:
+        update_cache: true
+
+    - name: Instalar pacotes do NFS
+      apt:
+        name: nfs-common
+        state: latest
+
+    - name: Criar diretório local
+      file:
+        path: home/vinicius/dados_swarm
+        state: directory
+        mode: '0755'
+
+    - name: Adicionar entrada ao /etc/fstab
+      lineinfile:
+        path: /etc/fstab
+        line: "192.168.0.130:/home/vinicius/dados_swarm  home/vinicius/dados_swarm  nfs  defaults  0  0"
+        state: present
+        create: yes
+
+    - name: Montar volume compartilhado
+      mount:
+        path: ~/dados_swarm
+        src: 192.168.0.130:/home/vinicius/dados_swarm
+        fstype: nfs
+        opts: defaults
+        state: mounted
