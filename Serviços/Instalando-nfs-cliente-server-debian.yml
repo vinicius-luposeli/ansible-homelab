@@ -47,7 +47,7 @@
 
     - name: Criar diretório local
       file:
-        path: home/vinicius/dados_swarm
+        path: /home/vinicius/dados_swarm
         state: directory
         mode: '0755'
 
