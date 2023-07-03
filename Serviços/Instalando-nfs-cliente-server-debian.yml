@@ -17,7 +17,8 @@
       file:
         path: /home/vinicius/dados_swarm
         state: directory
-        mode: '0755'
+        mode: '777'
+        owner: nobody
 
     - name: Adicionar configuração de exportação no /etc/exports
       blockinfile:
@@ -58,9 +59,4 @@
         create: yes
 
     - name: Montar volume compartilhado
-      mount:
-        path: ~/dados_swarm
-        src: 192.168.0.130:/home/vinicius/dados_swarm
-        fstype: nfs
-        opts: defaults
-        state: mounted
+      shell: sudo mount 192.168.0.130:/home/vinicius/dados_swarm /home/vinicius/dados_swarm
