@@ -1,6 +1,6 @@
 ---
 - name: Instalar e configurar o NFS
-  hosts: seu_servidor
+  hosts: nfs-server
   become: yes
 
   tasks:
@@ -31,7 +31,7 @@
         state: restarted
 
 - name: Configurar cliente NFS
-  hosts: nfs-client
+  hosts: nfs-cliente
   become: yes
 
   tasks:
