@@ -1,0 +1,53 @@
+---
+- name: Instalando Keepalived
+  hosts: clsuter-swarm
+  become: yes
+
+  tasks:
+    - name: Atualizando o Cache
+      apt:
+        update_cache: true
+
+    - name: Instalar pacotes do keepalived
+      apt:
+        name: keepalived
+        state: latest
+
+    - name: Dando enable no Keepalived
+      ansible.builtin.systemd:
+        state: started
+        enable: true
+
+    - name: Configurando ip_vs
+      shell: echo "modprobe ip_vs" >> /etc/modules
+
+    - name: Configurando o ip_vs 02
+      shell: modprobe ip_vs
+
+- name: Configurando keepAlived no Master
+  hosts: nfs-server
+  become: yes
+
+  tasks:
+    - name: Copiando keepalived.conf para o master
+      ansible.builtin.copy:
+        src: ./keepalived-master.conf
+        dest: /etc/keepalived/keepalived.conf
+
+    - name: Reiniciando Keepalived
+      ansible.builtin.systemd:
+        state: restarted  
+
+- name: Instalar e configurar Keepalived nos nós
+  hosts: nfs-cliente
+  become: yes
+
+  tasks:
+    - name: Copiando keepalived.conf para os nós
+      ansible.builtin.copy:
+        src: ./keepalived-master.conf
+        dest: /etc/keepalived/keepalived.conf
+
+    - name: Reiniciando Keepalived
+      ansible.builtin.systemd:
+        state: restarted  
