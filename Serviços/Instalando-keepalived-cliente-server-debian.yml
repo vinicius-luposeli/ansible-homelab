@@ -15,7 +15,9 @@
 
     - name: Dando enable no Keepalived
       ansible.builtin.systemd:
+        name: keepAlived
         enabled: true
+        
 
     - name: Configurando ip_vs
       shell: echo "modprobe ip_vs" >> /etc/modules
@@ -35,6 +37,7 @@
 
     - name: Reiniciando Keepalived
       ansible.builtin.systemd:
+        name: keepAlived
         daemon_reload: true
 
 - name: Instalar e configurar Keepalived nos nós
@@ -49,4 +52,5 @@
 
     - name: Reiniciando Keepalived
       ansible.builtin.systemd:
+        name: keepAlived
         daemon_reload: true
