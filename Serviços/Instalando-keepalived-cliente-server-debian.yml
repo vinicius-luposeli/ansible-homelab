@@ -1,6 +1,6 @@
 ---
 - name: Instalando Keepalived
-  hosts: clsuter-swarm
+  hosts: cluster-swarm
   become: yes
 
   tasks:
