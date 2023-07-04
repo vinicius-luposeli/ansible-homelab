@@ -15,7 +15,7 @@
 
     - name: Dando enable no Keepalived
       ansible.builtin.systemd:
-        name: keepAlived
+        name: keepalived
         enabled: true
         
 
@@ -37,7 +37,7 @@
 
     - name: Reiniciando Keepalived
       ansible.builtin.systemd:
-        name: keepAlived
+        name: keepalived
         daemon_reload: true
 
 - name: Instalar e configurar Keepalived nos nós
@@ -52,5 +52,5 @@
 
     - name: Reiniciando Keepalived
       ansible.builtin.systemd:
-        name: keepAlived
+        name: keepalived
         daemon_reload: true
