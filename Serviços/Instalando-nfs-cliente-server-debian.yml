@@ -19,6 +19,7 @@
         state: directory
         mode: '777'
         owner: nobody
+        group: nogroup
 
     - name: Adicionar configuração de exportação no /etc/exports
       blockinfile:
@@ -49,14 +50,16 @@
       file:
         path: /home/vinicius/dados_swarm
         state: directory
-        mode: '0755'
+        mode: '777'
+        owner: nobody
+        group: nogroup
 
     - name: Adicionar entrada ao /etc/fstab
       lineinfile:
         path: /etc/fstab
-        line: "192.168.0.130:/home/vinicius/dados_swarm  home/vinicius/dados_swarm  nfs  defaults  0  0"
+        line: "192.168.0.20:/home/vinicius/dados_swarm  home/vinicius/dados_swarm  nfs  defaults  0  0"
         state: present
         create: yes
 
     - name: Montar volume compartilhado
-      shell: sudo mount 192.168.0.130:/home/vinicius/dados_swarm /home/vinicius/dados_swarm
+      shell: sudo mount 192.168.0.20:/home/vinicius/dados_swarm /home/vinicius/dados_swarm
