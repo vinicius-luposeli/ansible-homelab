@@ -36,7 +36,7 @@
 
     - name: Reiniciando Keepalived
       ansible.builtin.systemd:
-        state: restarted  
+        daemon_reload: true
 
 - name: Instalar e configurar Keepalived nos nós
   hosts: nfs-cliente
@@ -50,4 +50,4 @@
 
     - name: Reiniciando Keepalived
       ansible.builtin.systemd:
-        state: restarted  
+        daemon_reload: true
