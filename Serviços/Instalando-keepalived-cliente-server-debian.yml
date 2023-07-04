@@ -15,7 +15,7 @@
 
     - name: Dando enable no Keepalived
       ansible.builtin.systemd:
-        enable: true
+        enabled: true
 
     - name: Configurando ip_vs
       shell: echo "modprobe ip_vs" >> /etc/modules
