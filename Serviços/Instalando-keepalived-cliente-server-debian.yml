@@ -15,7 +15,6 @@
 
     - name: Dando enable no Keepalived
       ansible.builtin.systemd:
-        state: started
         enable: true
 
     - name: Configurando ip_vs
