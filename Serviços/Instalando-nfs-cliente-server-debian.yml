@@ -50,9 +50,7 @@
       file:
         path: /home/vinicius/dados_swarm
         state: directory
-        mode: '777'
-        owner: nobody
-        group: nogroup
+        mode: '0755'
 
     - name: Adicionar entrada ao /etc/fstab
       lineinfile:
