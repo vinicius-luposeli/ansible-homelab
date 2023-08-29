@@ -1,6 +1,7 @@
 ---
-- hosts: all
-
+- name: Instalando Zabbix nas vms
+  hosts: mysql8
+  
   tasks:
     - name: Instalar o epel-release
       yum:
@@ -9,7 +10,7 @@
 
     - name: Atualizar todos os pacotes
       yum:
-        name: "*"
+        name: '*'
         state: latest
 
     - name: Adicionar a exclusão do zabbix ao arquivo oracle-epel-ol9.repo
@@ -51,8 +52,7 @@
       service:
         name: zabbix-agent2
         state: restarted
-
-$    - name: Habilitar o zabbix-agent2 no boot
-$      service:
-$        name: zabbix-agent2
+#    - name: Habilitar o zabbix-agent2 no boot
+#      service:
+#        name: zabbix-agent2
 #        enabled: yes
